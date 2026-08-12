@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { Manrope, Syne } from "next/font/google";
+import { Figtree, Outfit } from "next/font/google";
 import { SessionProvider } from "@/components/auth/SessionProvider";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { RouteProgress } from "@/components/ui/RouteProgress";
 import "./globals.css";
 
-const bodyFont = Manrope({
+const bodyFont = Figtree({
   subsets: ["latin"],
   variable: "--font-body",
   weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
-const displayFont = Syne({
+const displayFont = Outfit({
   subsets: ["latin"],
   variable: "--font-display",
   weight: ["500", "600", "700", "800"],

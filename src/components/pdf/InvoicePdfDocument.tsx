@@ -16,9 +16,9 @@ import type { InvoiceDocument } from "@/lib/types";
 Font.registerHyphenationCallback((word) => [word]);
 
 const ink = "#0A0A0A";
-const muted = "#6B6B6B";
+const muted = "#525252";
 const line = "#E5E5E5";
-const soft = "#F7F7F7";
+const soft = "#F7FBFE";
 
 const styles = StyleSheet.create({
   page: {

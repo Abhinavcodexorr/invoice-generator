@@ -42,7 +42,7 @@ export function BrandLogo({
             gradientUnits="userSpaceOnUse"
           >
             <stop stopColor="#0A0A0A" />
-            <stop offset="1" stopColor="#222222" />
+            <stop offset="1" stopColor="#1F1F1F" />
           </linearGradient>
           <linearGradient
             id={accentId}
@@ -52,9 +52,9 @@ export function BrandLogo({
             y2="12"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="#FF6A2E" />
-            <stop offset="0.55" stopColor="#FF3D00" />
-            <stop offset="1" stopColor="#C62800" />
+            <stop stopColor="#C5E6F7" />
+            <stop offset="0.55" stopColor="#8ECAE6" />
+            <stop offset="1" stopColor="#6EB6D9" />
           </linearGradient>
         </defs>
         <rect width="64" height="64" rx="16" fill={`url(#${bgId})`} />

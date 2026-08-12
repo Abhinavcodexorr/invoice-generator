@@ -25,7 +25,7 @@ export function AppFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="site-footer mt-auto border-t border-white/10 bg-[linear-gradient(180deg,#161616_0%,#0a0a0a_100%)] text-white">
+    <footer className="site-footer mt-auto border-t border-white/10 bg-[linear-gradient(180deg,#171717_0%,#0a0a0a_100%)] text-white">
       <div className="mx-auto grid max-w-5xl gap-10 px-4 py-14 sm:grid-cols-2 sm:px-6 lg:grid-cols-3">
         <div>
           <h3 className="font-display text-[0.78rem] font-bold uppercase tracking-[0.18em] text-white/55">
