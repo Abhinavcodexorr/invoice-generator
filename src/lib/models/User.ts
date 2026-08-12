@@ -9,7 +9,8 @@ const UserSchema = new Schema(
       lowercase: true,
       trim: true,
     },
-    passwordHash: { type: String, required: true },
+    // Optional for Google-only accounts
+    passwordHash: { type: String, required: false, default: null },
     name: { type: String, default: "" },
     plan: {
       type: String,

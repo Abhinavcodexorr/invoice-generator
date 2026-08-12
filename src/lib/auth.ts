@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
 import { connectMongo } from "@/lib/mongodb";
 import { User } from "@/lib/models/User";
 import { normalizePlan } from "@/lib/plans";
@@ -12,6 +13,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/auth/sign-in",
   },
   providers: [
+    Google({
+      allowDangerousEmailAccountLinking: true,
+    }),
     Credentials({
       name: "credentials",
       credentials: {
@@ -27,7 +31,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         await connectMongo();
         const user = await User.findOne({ email });
-        if (!user) return null;
+        if (!user?.passwordHash) return null;
 
         const ok = await bcrypt.compare(password, user.passwordHash);
         if (!ok) return null;
@@ -42,6 +46,32 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider !== "google") return true;
+
+      const email = String(user.email || "")
+        .toLowerCase()
+        .trim();
+      if (!email) return false;
+
+      await connectMongo();
+      let dbUser = await User.findOne({ email });
+      if (!dbUser) {
+        dbUser = await User.create({
+          email,
+          name: user.name || "",
+          plan: "free",
+          planStatus: "active",
+        });
+      } else if (user.name && !dbUser.name) {
+        dbUser.name = user.name;
+        await dbUser.save();
+      }
+
+      user.id = String(dbUser._id);
+      user.plan = normalizePlan(dbUser.plan);
+      return true;
+    },
     async jwt({ token, user, trigger }) {
       if (user) {
         token.sub = user.id;

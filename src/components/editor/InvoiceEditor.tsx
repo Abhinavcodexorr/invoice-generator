@@ -1,7 +1,7 @@
 "use client";
 
 import { pdf } from "@react-pdf/renderer";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppFooter } from "@/components/layout/AppFooter";
 import { AppHeader } from "@/components/layout/AppHeader";
@@ -61,6 +61,8 @@ export function InvoiceEditor({ initialDocument = null }: InvoiceEditorProps) {
   const [status, setStatus] = useState<string | null>(null);
   const [hydrated, setHydrated] = useState(Boolean(initialDocument));
   const [balancePulse, setBalancePulse] = useState(false);
+  const logoInputRef = useRef<HTMLInputElement>(null);
+  const skipDraftSaveRef = useRef(false);
 
   useEffect(() => {
     if (initialDocument) {
@@ -75,6 +77,10 @@ export function InvoiceEditor({ initialDocument = null }: InvoiceEditorProps) {
 
   useEffect(() => {
     if (!hydrated || initialDocument?.id) return;
+    if (skipDraftSaveRef.current) {
+      skipDraftSaveRef.current = false;
+      return;
+    }
     const t = window.setTimeout(() => saveDraft(doc), 400);
     return () => window.clearTimeout(t);
   }, [doc, hydrated, initialDocument?.id]);
@@ -117,6 +123,7 @@ export function InvoiceEditor({ initialDocument = null }: InvoiceEditorProps) {
   const handleLogo = (file: File | null) => {
     if (!file) {
       patch({ logo_url: null, logo_data_url: null });
+      if (logoInputRef.current) logoInputRef.current.value = "";
       return;
     }
     const reader = new FileReader();
@@ -125,6 +132,13 @@ export function InvoiceEditor({ initialDocument = null }: InvoiceEditorProps) {
     };
     reader.readAsDataURL(file);
   };
+
+  const resetForm = useCallback(() => {
+    skipDraftSaveRef.current = true;
+    clearDraft();
+    setDoc(createEmptyDocument("invoice"));
+    if (logoInputRef.current) logoInputRef.current.value = "";
+  }, []);
 
   const downloadPdf = async () => {
     // Always free — no login required.
@@ -144,7 +158,8 @@ export function InvoiceEditor({ initialDocument = null }: InvoiceEditorProps) {
       a.download = `invoice_${pdfDoc.number || "1"}.pdf`;
       a.click();
       URL.revokeObjectURL(url);
-      setStatus("PDF downloaded — free, no login needed");
+      resetForm();
+      setStatus("PDF downloaded — form cleared for the next invoice");
     } catch (err) {
       setStatus(err instanceof Error ? err.message : "PDF download failed");
     } finally {
@@ -234,8 +249,8 @@ export function InvoiceEditor({ initialDocument = null }: InvoiceEditorProps) {
       }
       throw new Error(data.error || "Failed to send");
     }
-    setStatus(`Sent to ${payload.to}`);
-    if (data.document) setDoc(data.document as InvoiceDocument);
+    setStatus(`Sent to ${payload.to} — form cleared for the next invoice`);
+    resetForm();
   };
 
   const logoSrc = doc.logo_data_url || doc.logo_url;
@@ -259,20 +274,6 @@ export function InvoiceEditor({ initialDocument = null }: InvoiceEditorProps) {
                 cloud sync and email send.
               </p>
               <div className="studio-actions">
-                <button
-                  type="button"
-                  onClick={downloadPdf}
-                  disabled={busy === "download"}
-                  className="btn btn-primary !px-5 !py-2.5"
-                >
-                  {busy === "download" ? (
-                    <>
-                      <Spinner size={16} /> Preparing…
-                    </>
-                  ) : (
-                    "Download PDF · Free"
-                  )}
-                </button>
                 <button
                   type="button"
                   onClick={() =>
@@ -304,7 +305,9 @@ export function InvoiceEditor({ initialDocument = null }: InvoiceEditorProps) {
               {/* Header: from left / INVOICE + number right — never overlapping */}
               <div className="grid gap-8 sm:grid-cols-[1fr_auto] sm:items-start">
                 <div className="space-y-3">
-                  <label className="logo-drop group">
+                  <label
+                    className={`logo-drop group ${logoSrc ? "has-logo" : ""}`}
+                  >
                     {logoSrc ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -313,9 +316,15 @@ export function InvoiceEditor({ initialDocument = null }: InvoiceEditorProps) {
                         className="max-h-16 max-w-32 object-contain"
                       />
                     ) : (
-                      <span>+ Add Logo</span>
+                      <>
+                        <span className="logo-drop__icon" aria-hidden>
+                          +
+                        </span>
+                        <span>Add logo / image</span>
+                      </>
                     )}
                     <input
+                      ref={logoInputRef}
                       type="file"
                       accept="image/*"
                       className="hidden"
@@ -323,13 +332,22 @@ export function InvoiceEditor({ initialDocument = null }: InvoiceEditorProps) {
                     />
                   </label>
                   {logoSrc ? (
-                    <button
-                      type="button"
-                      onClick={() => handleLogo(null)}
-                      className="text-xs text-[var(--muted)] hover:text-red-600"
-                    >
-                      Remove logo
-                    </button>
+                    <div className="logo-actions">
+                      <button
+                        type="button"
+                        className="btn btn-ghost"
+                        onClick={() => logoInputRef.current?.click()}
+                      >
+                        Change logo
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-remove-logo"
+                        onClick={() => handleLogo(null)}
+                      >
+                        Remove logo
+                      </button>
+                    </div>
                   ) : null}
                   <div>
                     <span className="invoice-label">From</span>

@@ -14,12 +14,12 @@ export function BrandLogo({
   variant = "default",
 }: BrandLogoProps) {
   const uid = useId().replace(/:/g, "");
-  const bgId = `ig-bg-${uid}`;
+  const paperId = `ig-paper-${uid}`;
   const accentId = `ig-accent-${uid}`;
 
   return (
     <span
-      className={`inline-flex shrink-0 overflow-hidden rounded-[0.7rem] shadow-[0_10px_22px_rgba(0,0,0,0.22)] transition-transform duration-300 ease-out group-hover:-rotate-6 group-hover:scale-105 ${
+      className={`inline-flex shrink-0 overflow-hidden rounded-[0.75rem] shadow-[0_10px_24px_rgba(0,0,0,0.22)] transition-transform duration-300 ease-out group-hover:-rotate-6 group-hover:scale-105 ${
         variant === "onDark" ? "ring-1 ring-white/15" : ""
       } ${className}`}
       style={{ width: size, height: size }}
@@ -34,47 +34,72 @@ export function BrandLogo({
       >
         <defs>
           <linearGradient
-            id={bgId}
-            x1="8"
-            y1="4"
-            x2="56"
-            y2="60"
+            id={paperId}
+            x1="18"
+            y1="10"
+            x2="48"
+            y2="56"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="#0A0A0A" />
-            <stop offset="1" stopColor="#1F1F1F" />
+            <stop stopColor="#FFFFFF" />
+            <stop offset="1" stopColor="#EAF6FB" />
           </linearGradient>
           <linearGradient
             id={accentId}
-            x1="10"
+            x1="12"
             y1="52"
-            x2="54"
+            x2="52"
             y2="12"
             gradientUnits="userSpaceOnUse"
           >
             <stop stopColor="#C5E6F7" />
-            <stop offset="0.55" stopColor="#8ECAE6" />
+            <stop offset="0.5" stopColor="#8ECAE6" />
             <stop offset="1" stopColor="#6EB6D9" />
           </linearGradient>
         </defs>
-        <rect width="64" height="64" rx="16" fill={`url(#${bgId})`} />
-        <path
-          d="M49 7c4.8 3.2 8.4 8.8 9 15.4.2 2.8-.2 5.5-1.2 8L41 11.2C43.4 9.2 46.1 7.8 49 7Z"
-          fill={`url(#${accentId})`}
-        />
-        {/* I */}
-        <rect x="15.5" y="19" width="6" height="22" rx="1.8" fill="#FFFFFF" />
-        {/* G */}
-        <path
-          d="M46 30c0-5.6-4.2-9.6-9.8-9.6-5.7 0-10 4-10 9.8s4.3 9.8 10.2 9.8c3.1 0 5.8-1 7.6-2.9l-2.7-2.7c-1.2 1.1-2.8 1.7-4.8 1.7-3.2 0-5.5-2-5.9-5.1H46c.1-.7.2-1.3.2-2Zm-6.1-5.4c2.8 0 4.7 1.7 5.2 4.3H34.7c.6-2.6 2.5-4.3 5.2-4.3Z"
-          fill="#FFFFFF"
-        />
+
+        {/* Black mark */}
+        <rect width="64" height="64" rx="16" fill="#0A0A0A" />
+
+        {/* Soft accent glow */}
+        <circle cx="48" cy="16" r="18" fill={`url(#${accentId})`} opacity="0.35" />
+
+        {/* Invoice sheet */}
         <rect
-          x="18"
-          y="44.5"
-          width="28"
+          x="15"
+          y="12"
+          width="34"
+          height="40"
+          rx="5"
+          fill={`url(#${paperId})`}
+        />
+
+        {/* Folded corner */}
+        <path d="M39 12h5.5c2.5 0 4.5 2 4.5 4.5V22L39 12Z" fill={`url(#${accentId})`} />
+        <path d="M39 12v8.2c0 1 0.8 1.8 1.8 1.8H49L39 12Z" fill="#D7EEF7" />
+
+        {/* Header bar */}
+        <rect
+          x="20"
+          y="20"
+          width="18"
           height="3.2"
           rx="1.6"
+          fill={`url(#${accentId})`}
+        />
+
+        {/* Line items */}
+        <rect x="20" y="28" width="24" height="2.2" rx="1.1" fill="#0A0A0A" opacity="0.78" />
+        <rect x="20" y="34" width="20" height="2.2" rx="1.1" fill="#0A0A0A" opacity="0.45" />
+        <rect x="20" y="40" width="16" height="2.2" rx="1.1" fill="#0A0A0A" opacity="0.3" />
+
+        {/* Total chip */}
+        <rect
+          x="20"
+          y="45.5"
+          width="14"
+          height="3.6"
+          rx="1.8"
           fill={`url(#${accentId})`}
         />
       </svg>

@@ -783,31 +783,113 @@ button {
 
 .logo-drop {
   display: flex;
-  height: 6.5rem;
-  width: 11rem;
+  height: 6.75rem;
+  width: 11.5rem;
   cursor: pointer;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 0.35rem;
   border-radius: 18px;
-  border: 1.5px dashed color-mix(in oklab, var(--border) 80%, var(--accent));
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(248, 250, 252, 0.5));
-  color: var(--muted);
-  font-size: 0.9rem;
-  font-weight: 600;
+  border: 2px dashed #0a0a0a;
+  background: linear-gradient(180deg, #f0f9fd 0%, #e4f3fa 100%);
+  color: #0a0a0a;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   transition:
     border-color 240ms var(--ease-soft),
     color 240ms var(--ease-soft),
+    background 240ms var(--ease-soft),
     transform 240ms var(--ease-out),
     box-shadow 240ms var(--ease-soft);
 }
 
+.logo-drop__icon {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: #0a0a0a;
+  color: #8ecae6;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
 .logo-drop:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: #0a0a0a;
+  border-style: solid;
+  background: linear-gradient(180deg, #dff1f9 0%, #cfeaf5 100%);
+  color: #0a0a0a;
   transform: translateY(-2px);
-  box-shadow: 0 14px 28px rgba(142, 202, 230, 0.2);
+  box-shadow: 0 14px 28px rgba(142, 202, 230, 0.35);
+}
+
+.logo-drop.has-logo {
+  border-style: solid;
+  border-color: rgba(10, 10, 10, 0.18);
+  background: #fff;
+  padding: 0.65rem;
+}
+
+html[data-mode="dark"] .logo-drop {
+  border-color: #a8d8f0;
+  background: linear-gradient(180deg, #1a2228 0%, #12181c 100%);
+  color: #f5fbff;
+}
+
+html[data-mode="dark"] .logo-drop__icon {
+  background: #a8d8f0;
+  color: #0a0a0a;
+}
+
+html[data-mode="dark"] .logo-drop:hover {
+  border-color: #c5e6f7;
+  background: linear-gradient(180deg, #243038 0%, #1a242c 100%);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.45);
+}
+
+html[data-mode="dark"] .logo-drop.has-logo {
+  border-color: rgba(168, 216, 240, 0.35);
+  background: #0f0f0f;
+}
+
+.logo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.logo-actions .btn {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.4rem 0.75rem;
+}
+
+.logo-actions .btn-remove-logo {
+  color: #b91c1c;
+  border-color: rgba(185, 28, 28, 0.35);
+  background: rgba(254, 226, 226, 0.65);
+}
+
+.logo-actions .btn-remove-logo:hover {
+  color: #fff;
+  background: #b91c1c;
+  border-color: #b91c1c;
+}
+
+html[data-mode="dark"] .logo-actions .btn-remove-logo {
+  color: #fecaca;
+  border-color: rgba(248, 113, 113, 0.45);
+  background: rgba(127, 29, 29, 0.35);
+}
+
+html[data-mode="dark"] .logo-actions .btn-remove-logo:hover {
+  color: #fff;
+  background: #dc2626;
+  border-color: #dc2626;
 }
 
 .site-footer a {
