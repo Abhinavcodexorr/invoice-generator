@@ -23,6 +23,10 @@ export const metadata: Metadata = {
   title: "Invoice Generator",
   description:
     "Create professional invoices and download PDFs free — no login. Upgrade to Pro for cloud history and email sending.",
+  icons: {
+    icon: [{ url: "/logo.png", type: "image/png" }],
+    apple: [{ url: "/logo.png" }],
+  },
 };
 
 export default function RootLayout({

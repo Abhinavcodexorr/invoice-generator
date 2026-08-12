@@ -75,8 +75,8 @@ export function formatMoney(amount: number, currency: string): string {
 }
 
 /**
- * PDF-safe money format. Standard Helvetica can't draw many currency glyphs
- * (₹, €, ₩, etc.), so we always prefix the ISO code.
+ * PDF-safe money format (Helvetica / WinAnsi).
+ * Uses familiar symbols when the glyph is available; otherwise ISO code.
  */
 export function formatMoneyPdf(amount: number, currency: string): string {
   const code = normalizeCurrency(currency);
@@ -85,5 +85,22 @@ export function formatMoneyPdf(amount: number, currency: string): string {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(n);
-  return `${code} ${formatted}`;
+
+  const asciiPrefix: Record<string, string> = {
+    USD: "$",
+    CAD: "C$",
+    AUD: "A$",
+    NZD: "NZ$",
+    HKD: "HK$",
+    SGD: "S$",
+    MXN: "MX$",
+    GBP: "£",
+    EUR: "EUR ",
+    INR: "INR ",
+    JPY: "JPY ",
+    CNY: "CNY ",
+    CHF: "CHF ",
+  };
+
+  return `${asciiPrefix[code] ?? `${code} `}${formatted}`;
 }
